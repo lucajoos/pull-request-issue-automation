@@ -1,6 +1,9 @@
 name: 'pull-request-issue-automation'
 description: 'Automate the Creation of Pull Requests by Referencing Issues in Title'
 author: 'Luca Joos'
+branding:
+  icon: box
+  color: gray-dark
 inputs:
   token:
     required: true
