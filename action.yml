@@ -1,0 +1,25 @@
+name: 'automation'
+description: 'Automate the CI workflow with Projects'
+author: 'Luca Joos'
+inputs:
+  token:
+    required: true
+    description: 'input description here'
+  project:
+    required: true
+    description: 'Project id'
+  type:
+    required: true
+    description: 'Type of action to perform'
+  owner:
+    required: false
+    description: 'Owner'
+  repo:
+    required: false
+    description: 'Repo'
+  ref:
+    required: false
+    description: 'Ref'
+runs:
+  using: 'node16'
+  main: 'dist/index.js'
