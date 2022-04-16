@@ -62,11 +62,11 @@ function run() {
                 core.setFailed(`Unspecified or unknown 'type' provided`);
                 return;
             }
-            if (owner ? owner.length > 0 : true) {
+            if (owner ? owner.length === 0 : true) {
                 core.setFailed(`Unspecified field 'owner'`);
                 return;
             }
-            if (repo ? repo.length > 0 : true) {
+            if (repo ? repo.length === 0 : true) {
                 core.setFailed(`Unspecified field 'repo'`);
                 return;
             }
@@ -77,7 +77,7 @@ function run() {
             });
             if (options.type === 'pr') {
                 const ref = core.getInput('ref');
-                if (ref ? ref.length > 0 : true) {
+                if (ref ? ref.length === 0 : true) {
                     core.setFailed(`Unspecified field 'ref' is required for type 'pr'`);
                     return;
                 }
