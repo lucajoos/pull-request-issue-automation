@@ -14,22 +14,38 @@ async function pr(
       pull_number: parseInt(ref.split('refs/pull/')[1].split('/')[0])
     })
 
-    if(typeof data !== 'object') {
-      core.setFailed(`Could not find PR ${options.owner}/${options.repo}#${pr}: Missing response data`)
+    if (typeof data !== 'object') {
+      core.setFailed(
+        `Could not find PR ${options.owner}/${options.repo}#${pr}: Missing response data`
+      )
       return
     }
 
-    const author = core.getInput('author')
-
-    if(author ? author.length === 0 : true) {
-      core.setFailed(`Unspecified field 'author'`)
-      return
-    }
-
-    if(!new RegExp(author, 'g').test(data?.user?.login || '')) {
+    if (
+      !new RegExp(core.getInput('author'), 'g').test(data?.user?.login || '')
+    ) {
       core.warning(`Ignore pull request because user is not in 'author' field`)
+      return
     }
 
+    if (!new RegExp(core.getInput('title'), 'g').test(data.title || '')) {
+      core.warning(
+        `Ignore pull request because title does not match 'title' field`
+      )
+      return
+    }
+
+    const issue = parseInt(
+      (data.title.match(new RegExp(core.getInput('title-match'), 'g')) ||
+        [])[0] || '-1'
+    )
+
+    if (issue < 0) {
+      core.warning(`Could not retrieve issue number out of title`)
+      return
+    }
+
+    core.notice(issue.toString())
     core.notice(JSON.stringify(data))
   } catch (e: any) {
     core.setFailed(

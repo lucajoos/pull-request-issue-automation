@@ -135,22 +135,38 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(2186));
 function pr(octokit, options, ref) {
+    var _a;
     return __awaiter(this, void 0, void 0, function* () {
-        return new Promise((resolve) => __awaiter(this, void 0, void 0, function* () {
-            try {
-                const { data } = yield octokit.pulls.get({
-                    owner: options.owner,
-                    repo: options.repo,
-                    pull_number: parseInt(ref.split('refs/pull/')[1].split('/')[0])
-                });
-                core.notice(JSON.stringify(data));
-                resolve();
+        try {
+            const { data } = yield octokit.pulls.get({
+                owner: options.owner,
+                repo: options.repo,
+                pull_number: parseInt(ref.split('refs/pull/')[1].split('/')[0])
+            });
+            if (typeof data !== 'object') {
+                core.setFailed(`Could not find PR ${options.owner}/${options.repo}#${pr}: Missing response data`);
+                return;
             }
-            catch (e) {
-                core.warning(`Could not find PR ${options.owner}/${options.repo}#${pr}: ${e.message}`);
-                return null;
+            if (!new RegExp(core.getInput('author'), 'g').test(((_a = data === null || data === void 0 ? void 0 : data.user) === null || _a === void 0 ? void 0 : _a.login) || '')) {
+                core.warning(`Ignore pull request because user is not in 'author' field`);
+                return;
             }
-        }));
+            if (!new RegExp(core.getInput('title'), 'g').test(data.title || '')) {
+                core.warning(`Ignore pull request because title does not match 'title' field`);
+                return;
+            }
+            const issue = parseInt((data.title.match(new RegExp(core.getInput('title-match'), 'g')) || [])[0] || '-1');
+            if (issue < 0) {
+                core.warning(`Could not retrieve issue number out of title`);
+                return;
+            }
+            core.notice(issue.toString());
+            core.notice(JSON.stringify(data));
+        }
+        catch (e) {
+            core.setFailed(`Could not find PR ${options.owner}/${options.repo}#${pr}: ${e.message}`);
+            return;
+        }
     });
 }
 exports.default = pr;
