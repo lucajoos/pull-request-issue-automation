@@ -36,8 +36,8 @@ async function pr(
     }
 
     const issue = parseInt(
-      (data.title.match(new RegExp(core.getInput('title-match'), 'g')) ||
-        [])[0] || '-1'
+      (data.title.match(new RegExp(core.getInput('match'), 'g')) || [])[0] ||
+        '-1'
     )
 
     if (issue < 0) {

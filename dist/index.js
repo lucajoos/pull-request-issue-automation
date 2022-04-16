@@ -155,7 +155,8 @@ function pr(octokit, options, ref) {
                 core.warning(`Ignore pull request because title does not match 'title' field`);
                 return;
             }
-            const issue = parseInt((data.title.match(new RegExp(core.getInput('title-match'), 'g')) || [])[0] || '-1');
+            const issue = parseInt((data.title.match(new RegExp(core.getInput('match'), 'g')) ||
+                [])[0] || '-1');
             if (issue < 0) {
                 core.warning(`Could not retrieve issue number out of title`);
                 return;

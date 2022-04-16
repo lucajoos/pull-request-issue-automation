@@ -28,7 +28,7 @@ inputs:
     required: false
     description: 'PR title regex'
     default: \[#[0-9]+\]
-  title-match:
+  match:
     required: false
     description: 'PR title match regex'
     default: [0-9]+
