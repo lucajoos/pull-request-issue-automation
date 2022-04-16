@@ -19,3 +19,4 @@ jobs:
           type: 'pr'
           token: ${{ secrets.GITHUB_TOKEN }}
           ref: ${{ github.ref }}
+          author: (lucajoos)

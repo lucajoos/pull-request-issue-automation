@@ -20,6 +20,10 @@ inputs:
   ref:
     required: false
     description: 'Ref'
+  author:
+    required: true
+    description: 'Author REGEX'
+    default: .*
 runs:
   using: 'node16'
   main: 'dist/index.js'
