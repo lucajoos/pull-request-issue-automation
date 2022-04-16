@@ -1,6 +1,6 @@
 {
   "name": "pull-request-issue-automation",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "private": true,
   "description": "Automate the Creation of Pull Requests by Referencing Issues in Title",
   "main": "lib/main.js",
