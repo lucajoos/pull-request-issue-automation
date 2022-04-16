@@ -138,25 +138,25 @@ function pr(octokit, options, ref) {
     var _a;
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const { data } = yield octokit.pulls.get({
+            const { data: pull } = yield octokit.pulls.get({
                 owner: options.owner,
                 repo: options.repo,
                 pull_number: parseInt(ref.split('refs/pull/')[1].split('/')[0])
             });
-            if (typeof data !== 'object') {
+            if (typeof pull !== 'object') {
                 core.setFailed(`Could not find PR ${options.owner}/${options.repo}#${pr}: Missing response data`);
                 return;
             }
-            const login = ((_a = data === null || data === void 0 ? void 0 : data.user) === null || _a === void 0 ? void 0 : _a.login) || '';
+            const login = ((_a = pull === null || pull === void 0 ? void 0 : pull.user) === null || _a === void 0 ? void 0 : _a.login) || '';
             if (!new RegExp(core.getInput('author'), 'g').test(login)) {
                 core.warning(`Ignore pull request because user is not in 'author' field`);
                 return;
             }
-            if (!new RegExp(core.getInput('title'), 'g').test(data.title || '')) {
+            if (!new RegExp(core.getInput('title'), 'g').test(pull.title || '')) {
                 core.warning(`Ignore pull request because title does not match 'title' field`);
                 return;
             }
-            const number = parseInt((data.title.match(new RegExp(core.getInput('match'), 'g')) || [])[0] ||
+            const number = parseInt((pull.title.match(new RegExp(core.getInput('match'), 'g')) || [])[0] ||
                 '-1');
             if (number < 0) {
                 core.warning(`Could not retrieve issue number out of title`);
@@ -169,11 +169,31 @@ function pr(octokit, options, ref) {
                 assignees: [login]
             });
             core.debug('Assigning issue to author of pull request');
-            const issue = yield octokit.rest.issues.get({
+            const { data: issue } = yield octokit.rest.issues.get({
                 owner: options.owner,
                 repo: options.repo,
                 issue_number: number
             });
+            if (typeof issue !== 'object') {
+                core.setFailed(`Could not find PR ${options.owner}/${options.repo}#${pr}: Missing response pull`);
+                return;
+            }
+            octokit.rest.pulls.update({
+                owner: options.owner,
+                repo: options.repo,
+                pull_number: pull.number,
+                title: issue.title,
+                body: issue.body || undefined
+            });
+            core.notice('Update pull request data');
+            octokit.rest.issues.addLabels({
+                owner: options.owner,
+                repo: options.repo,
+                issue_number: pull.number,
+                // @ts-ignore
+                labels: issue.labels.map(({ name }) => name)
+            });
+            core.notice('Add labels to pull request');
             core.notice(JSON.stringify(issue));
         }
         catch (e) {

@@ -8,27 +8,27 @@ async function pr(
   ref: string
 ): Promise<void> {
   try {
-    const {data} = await octokit.pulls.get({
+    const {data: pull} = await octokit.pulls.get({
       owner: options.owner,
       repo: options.repo,
       pull_number: parseInt(ref.split('refs/pull/')[1].split('/')[0])
     })
 
-    if (typeof data !== 'object') {
+    if (typeof pull !== 'object') {
       core.setFailed(
         `Could not find PR ${options.owner}/${options.repo}#${pr}: Missing response data`
       )
       return
     }
 
-    const login = data?.user?.login || ''
+    const login = pull?.user?.login || ''
 
     if (!new RegExp(core.getInput('author'), 'g').test(login)) {
       core.warning(`Ignore pull request because user is not in 'author' field`)
       return
     }
 
-    if (!new RegExp(core.getInput('title'), 'g').test(data.title || '')) {
+    if (!new RegExp(core.getInput('title'), 'g').test(pull.title || '')) {
       core.warning(
         `Ignore pull request because title does not match 'title' field`
       )
@@ -36,7 +36,7 @@ async function pr(
     }
 
     const number = parseInt(
-      (data.title.match(new RegExp(core.getInput('match'), 'g')) || [])[0] ||
+      (pull.title.match(new RegExp(core.getInput('match'), 'g')) || [])[0] ||
         '-1'
     )
 
@@ -54,11 +54,38 @@ async function pr(
 
     core.debug('Assigning issue to author of pull request')
 
-    const issue = await octokit.rest.issues.get({
+    const {data: issue} = await octokit.rest.issues.get({
       owner: options.owner,
       repo: options.repo,
       issue_number: number
     })
+
+    if (typeof issue !== 'object') {
+      core.setFailed(
+        `Could not find PR ${options.owner}/${options.repo}#${pr}: Missing response pull`
+      )
+      return
+    }
+
+    octokit.rest.pulls.update({
+      owner: options.owner,
+      repo: options.repo,
+      pull_number: pull.number,
+      title: issue.title,
+      body: issue.body || undefined
+    })
+
+    core.notice('Update pull request data')
+
+    octokit.rest.issues.addLabels({
+      owner: options.owner,
+      repo: options.repo,
+      issue_number: pull.number,
+      // @ts-ignore
+      labels: issue.labels.map(({name}) => name)
+    })
+
+    core.notice('Add labels to pull request')
 
     core.notice(JSON.stringify(issue))
   } catch (e: any) {
