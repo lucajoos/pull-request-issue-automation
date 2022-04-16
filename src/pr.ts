@@ -21,9 +21,9 @@ async function pr(
       return
     }
 
-    if (
-      !new RegExp(core.getInput('author'), 'g').test(data?.user?.login || '')
-    ) {
+    const login = data?.user?.login || ''
+
+    if (!new RegExp(core.getInput('author'), 'g').test(login)) {
       core.warning(`Ignore pull request because user is not in 'author' field`)
       return
     }
@@ -35,18 +35,32 @@ async function pr(
       return
     }
 
-    const issue = parseInt(
+    const number = parseInt(
       (data.title.match(new RegExp(core.getInput('match'), 'g')) || [])[0] ||
         '-1'
     )
 
-    if (issue < 0) {
+    if (number < 0) {
       core.warning(`Could not retrieve issue number out of title`)
       return
     }
 
-    core.notice(issue.toString())
-    core.notice(JSON.stringify(data))
+    octokit.rest.issues.addAssignees({
+      owner: options.owner,
+      repo: options.repo,
+      issue_number: number,
+      assignees: [login]
+    })
+
+    core.debug('Assigning issue to author of pull request')
+
+    const issue = await octokit.rest.issues.get({
+      owner: options.owner,
+      repo: options.repo,
+      issue_number: number
+    })
+
+    core.notice(JSON.stringify(issue))
   } catch (e: any) {
     core.setFailed(
       `Could not find PR ${options.owner}/${options.repo}#${pr}: ${e.message}`

@@ -147,7 +147,8 @@ function pr(octokit, options, ref) {
                 core.setFailed(`Could not find PR ${options.owner}/${options.repo}#${pr}: Missing response data`);
                 return;
             }
-            if (!new RegExp(core.getInput('author'), 'g').test(((_a = data === null || data === void 0 ? void 0 : data.user) === null || _a === void 0 ? void 0 : _a.login) || '')) {
+            const login = ((_a = data === null || data === void 0 ? void 0 : data.user) === null || _a === void 0 ? void 0 : _a.login) || '';
+            if (!new RegExp(core.getInput('author'), 'g').test(login)) {
                 core.warning(`Ignore pull request because user is not in 'author' field`);
                 return;
             }
@@ -155,14 +156,25 @@ function pr(octokit, options, ref) {
                 core.warning(`Ignore pull request because title does not match 'title' field`);
                 return;
             }
-            const issue = parseInt((data.title.match(new RegExp(core.getInput('match'), 'g')) ||
-                [])[0] || '-1');
-            if (issue < 0) {
+            const number = parseInt((data.title.match(new RegExp(core.getInput('match'), 'g')) || [])[0] ||
+                '-1');
+            if (number < 0) {
                 core.warning(`Could not retrieve issue number out of title`);
                 return;
             }
-            core.notice(issue.toString());
-            core.notice(JSON.stringify(data));
+            octokit.rest.issues.addAssignees({
+                owner: options.owner,
+                repo: options.repo,
+                issue_number: number,
+                assignees: [login]
+            });
+            core.debug('Assigning issue to author of pull request');
+            const issue = yield octokit.rest.issues.get({
+                owner: options.owner,
+                repo: options.repo,
+                issue_number: number
+            });
+            core.notice(JSON.stringify(issue));
         }
         catch (e) {
             core.setFailed(`Could not find PR ${options.owner}/${options.repo}#${pr}: ${e.message}`);
