@@ -168,7 +168,7 @@ function pr(octokit, options, ref) {
                 issue_number: number,
                 assignees: [login]
             });
-            core.debug('Assigning issue to author of pull request');
+            core.notice('Assigning issue to author of pull request');
             const { data: issue } = yield octokit.rest.issues.get({
                 owner: options.owner,
                 repo: options.repo,
@@ -194,7 +194,6 @@ function pr(octokit, options, ref) {
                 labels: issue.labels.map(({ name }) => name)
             });
             core.notice('Add labels to pull request');
-            core.notice(JSON.stringify(issue));
         }
         catch (e) {
             core.setFailed(`Could not find PR ${options.owner}/${options.repo}#${pr}: ${e.message}`);

@@ -52,7 +52,7 @@ async function pr(
       assignees: [login]
     })
 
-    core.debug('Assigning issue to author of pull request')
+    core.notice('Assigning issue to author of pull request')
 
     const {data: issue} = await octokit.rest.issues.get({
       owner: options.owner,
@@ -86,8 +86,6 @@ async function pr(
     })
 
     core.notice('Add labels to pull request')
-
-    core.notice(JSON.stringify(issue))
   } catch (e: any) {
     core.setFailed(
       `Could not find PR ${options.owner}/${options.repo}#${pr}: ${e.message}`
