@@ -54,7 +54,7 @@ function run() {
             const type = core.getInput('type') || '';
             const owner = core.getInput('owner') || github.context.repo.owner || '';
             const repo = core.getInput('repo') || github.context.repo.repo || '';
-            if (token ? token.length > 0 : true) {
+            if (token ? token.length === 0 : true) {
                 core.setFailed(`Unspecified field 'token'`);
                 return;
             }
