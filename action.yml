@@ -31,7 +31,7 @@ inputs:
   match:
     required: false
     description: 'PR title match regex'
-    default: [0-9]+
+    default: '[0-9]+'
 runs:
   using: 'node16'
   main: 'dist/index.js'
