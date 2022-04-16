@@ -1,8 +1,8 @@
 {
-  "name": "automation",
-  "version": "1.0.0",
+  "name": "pull-request-issue-automation",
+  "version": "1.0.1",
   "private": true,
-  "description": "Automate the CI workflow with Projects",
+  "description": "Automate the Creation of Pull Requests by Referencing Issues in Title",
   "main": "lib/main.js",
   "scripts": {
     "build": "tsc",

@@ -5,26 +5,18 @@ import pr from './pr'
 
 export type Options = {
   token: string
-  type: string
   owner: string
   repo: string
 }
 
 async function run(): Promise<void> {
   try {
-    const types = ['pr']
     const token = core.getInput('token') || process.env.GITHUB_TOKEN || ''
-    const type = core.getInput('type') || ''
     const owner = core.getInput('owner') || github.context.repo.owner || ''
     const repo = core.getInput('repo') || github.context.repo.repo || ''
 
     if (token ? token.length === 0 : true) {
       core.setFailed(`Unspecified field 'token'`)
-      return
-    }
-
-    if (type ? !types.includes(type) : true) {
-      core.setFailed(`Unspecified or unknown 'type' provided`)
       return
     }
 
@@ -38,23 +30,21 @@ async function run(): Promise<void> {
       return
     }
 
-    const options: Options = {token, type, owner, repo}
+    const options: Options = {token, owner, repo}
+
+    const ref = core.getInput('ref')
+
+    if (ref ? ref.length === 0 : true) {
+      core.setFailed(`Unspecified field 'ref' is required for type 'pr'`)
+      return
+    }
 
     const octokit = new Octokit({
       auth: `token ${options.token}`,
       baseUrl: 'https://api.github.com'
     })
 
-    if (options.type === 'pr') {
-      const ref = core.getInput('ref')
-
-      if (ref ? ref.length === 0 : true) {
-        core.setFailed(`Unspecified field 'ref' is required for type 'pr'`)
-        return
-      }
-
-      await pr(octokit, options, ref)
-    }
+    await pr(octokit, options, ref)
   } catch (error) {
     if (error instanceof Error) core.setFailed(error.message)
   }

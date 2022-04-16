@@ -1,36 +1,30 @@
-name: 'automation'
-description: 'Automate the CI workflow with Projects'
+name: 'pull-request-issue-automation'
+description: 'Automate the Creation of Pull Requests by Referencing Issues in Title'
 author: 'Luca Joos'
 inputs:
   token:
     required: true
-    description: 'input description here'
-  project:
-    required: true
-    description: 'Project id'
-  type:
-    required: true
-    description: 'Type of action to perform'
+    description: 'GitHub Access Token'
   owner:
     required: false
-    description: 'Owner'
+    description: 'Repository Owner'
   repo:
     required: false
-    description: 'Repo'
+    description: 'Repository'
   ref:
     required: false
-    description: 'Ref'
+    description: 'Ref of Current Pull Request'
   author:
     required: false
-    description: 'PR author regex'
+    description: 'Regular Expression to Match Author of Pull Request'
     default: .*
   title:
     required: false
-    description: 'PR title regex'
+    description: 'Regular Expression to Match Title of Pull Request'
     default: \[#[0-9]+\]
   match:
     required: false
-    description: 'PR title match regex'
+    description: 'Regular Expression to Extract Issue from Title'
     default: '[0-9]+'
 runs:
   using: 'node16'
