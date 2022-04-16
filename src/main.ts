@@ -1,7 +1,7 @@
-import core from '@actions/core'
-import github from '@actions/github'
-import pr from './pr'
+import * as core from '@actions/core'
+import * as github from '@actions/github'
 import {Octokit} from '@octokit/rest'
+import pr from './pr'
 
 export type Options = {
   token: string
@@ -18,7 +18,7 @@ async function run(): Promise<void> {
     const owner = core.getInput('owner') || github.context.repo.owner || ''
     const repo = core.getInput('repo') || github.context.repo.repo || ''
 
-    if (token ? token.length > 0 : true) {
+    if (token ? token.length === 0 : true) {
       core.setFailed(`Unspecified field 'token'`)
       return
     }
@@ -28,12 +28,12 @@ async function run(): Promise<void> {
       return
     }
 
-    if (owner ? owner.length > 0 : true) {
+    if (owner ? owner.length === 0 : true) {
       core.setFailed(`Unspecified field 'owner'`)
       return
     }
 
-    if (repo ? repo.length > 0 : true) {
+    if (repo ? repo.length === 0 : true) {
       core.setFailed(`Unspecified field 'repo'`)
       return
     }
@@ -48,7 +48,7 @@ async function run(): Promise<void> {
     if (options.type === 'pr') {
       const ref = core.getInput('ref')
 
-      if (ref ? ref.length > 0 : true) {
+      if (ref ? ref.length === 0 : true) {
         core.setFailed(`Unspecified field 'ref' is required for type 'pr'`)
         return
       }

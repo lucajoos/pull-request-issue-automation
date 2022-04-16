@@ -20,6 +20,18 @@ inputs:
   ref:
     required: false
     description: 'Ref'
+  author:
+    required: false
+    description: 'PR author regex'
+    default: .*
+  title:
+    required: false
+    description: 'PR title regex'
+    default: \[#[0-9]+\]
+  match:
+    required: false
+    description: 'PR title match regex'
+    default: '[0-9]+'
 runs:
   using: 'node16'
   main: 'dist/index.js'

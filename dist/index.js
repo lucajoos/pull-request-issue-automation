@@ -6,6 +6,29 @@ require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 
 "use strict";
 
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -19,32 +42,32 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const core_1 = __importDefault(__nccwpck_require__(2186));
-const github_1 = __importDefault(__nccwpck_require__(5438));
-const pr_1 = __importDefault(__nccwpck_require__(515));
+const core = __importStar(__nccwpck_require__(2186));
+const github = __importStar(__nccwpck_require__(5438));
 const rest_1 = __nccwpck_require__(5375);
+const pr_1 = __importDefault(__nccwpck_require__(515));
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const types = ['pr'];
-            const token = core_1.default.getInput('token') || process.env.GITHUB_TOKEN || '';
-            const type = core_1.default.getInput('type') || '';
-            const owner = core_1.default.getInput('owner') || github_1.default.context.repo.owner || '';
-            const repo = core_1.default.getInput('repo') || github_1.default.context.repo.repo || '';
-            if (token ? token.length > 0 : true) {
-                core_1.default.setFailed(`Unspecified field 'token'`);
+            const token = core.getInput('token') || process.env.GITHUB_TOKEN || '';
+            const type = core.getInput('type') || '';
+            const owner = core.getInput('owner') || github.context.repo.owner || '';
+            const repo = core.getInput('repo') || github.context.repo.repo || '';
+            if (token ? token.length === 0 : true) {
+                core.setFailed(`Unspecified field 'token'`);
                 return;
             }
             if (type ? !types.includes(type) : true) {
-                core_1.default.setFailed(`Unspecified or unknown 'type' provided`);
+                core.setFailed(`Unspecified or unknown 'type' provided`);
                 return;
             }
-            if (owner ? owner.length > 0 : true) {
-                core_1.default.setFailed(`Unspecified field 'owner'`);
+            if (owner ? owner.length === 0 : true) {
+                core.setFailed(`Unspecified field 'owner'`);
                 return;
             }
-            if (repo ? repo.length > 0 : true) {
-                core_1.default.setFailed(`Unspecified field 'repo'`);
+            if (repo ? repo.length === 0 : true) {
+                core.setFailed(`Unspecified field 'repo'`);
                 return;
             }
             const options = { token, type, owner, repo };
@@ -53,9 +76,9 @@ function run() {
                 baseUrl: 'https://api.github.com'
             });
             if (options.type === 'pr') {
-                const ref = core_1.default.getInput('ref');
-                if (ref ? ref.length > 0 : true) {
-                    core_1.default.setFailed(`Unspecified field 'ref' is required for type 'pr'`);
+                const ref = core.getInput('ref');
+                if (ref ? ref.length === 0 : true) {
+                    core.setFailed(`Unspecified field 'ref' is required for type 'pr'`);
                     return;
                 }
                 yield (0, pr_1.default)(octokit, options, ref);
@@ -63,7 +86,7 @@ function run() {
         }
         catch (error) {
             if (error instanceof Error)
-                core_1.default.setFailed(error.message);
+                core.setFailed(error.message);
         }
     });
 }
@@ -77,6 +100,29 @@ run();
 
 "use strict";
 
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -86,28 +132,73 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const core_1 = __importDefault(__nccwpck_require__(2186));
+const core = __importStar(__nccwpck_require__(2186));
 function pr(octokit, options, ref) {
+    var _a;
     return __awaiter(this, void 0, void 0, function* () {
-        return new Promise((resolve) => __awaiter(this, void 0, void 0, function* () {
-            try {
-                const { data } = yield octokit.pulls.get({
-                    owner: options.owner,
-                    repo: options.repo,
-                    pull_number: parseInt(ref.split('refs/pull/')[1].split('/')[0])
-                });
-                core_1.default.notice(JSON.stringify(data));
-                resolve();
+        try {
+            const { data: pull } = yield octokit.pulls.get({
+                owner: options.owner,
+                repo: options.repo,
+                pull_number: parseInt(ref.split('refs/pull/')[1].split('/')[0])
+            });
+            if (typeof pull !== 'object') {
+                core.setFailed(`Could not find PR ${options.owner}/${options.repo}#${pr}: Missing response data`);
+                return;
             }
-            catch (e) {
-                core_1.default.warning(`Could not find PR ${options.owner}/${options.repo}#${pr}: ${e.message}`);
-                return null;
+            const login = ((_a = pull === null || pull === void 0 ? void 0 : pull.user) === null || _a === void 0 ? void 0 : _a.login) || '';
+            if (!new RegExp(core.getInput('author'), 'g').test(login)) {
+                core.warning(`Ignore pull request because user is not in 'author' field`);
+                return;
             }
-        }));
+            if (!new RegExp(core.getInput('title'), 'g').test(pull.title || '')) {
+                core.warning(`Ignore pull request because title does not match 'title' field`);
+                return;
+            }
+            const number = parseInt((pull.title.match(new RegExp(core.getInput('match'), 'g')) || [])[0] ||
+                '-1');
+            if (number < 0) {
+                core.warning(`Could not retrieve issue number out of title`);
+                return;
+            }
+            octokit.rest.issues.addAssignees({
+                owner: options.owner,
+                repo: options.repo,
+                issue_number: number,
+                assignees: [login]
+            });
+            core.notice('Assigning issue to author of pull request');
+            const { data: issue } = yield octokit.rest.issues.get({
+                owner: options.owner,
+                repo: options.repo,
+                issue_number: number
+            });
+            if (typeof issue !== 'object') {
+                core.setFailed(`Could not find PR ${options.owner}/${options.repo}#${pr}: Missing response pull`);
+                return;
+            }
+            octokit.rest.pulls.update({
+                owner: options.owner,
+                repo: options.repo,
+                pull_number: pull.number,
+                title: issue.title,
+                body: issue.body || undefined
+            });
+            core.notice('Update pull request data');
+            octokit.rest.issues.addLabels({
+                owner: options.owner,
+                repo: options.repo,
+                issue_number: pull.number,
+                // @ts-ignore
+                labels: issue.labels.map(({ name }) => name)
+            });
+            core.notice('Add labels to pull request');
+        }
+        catch (e) {
+            core.setFailed(`Could not find PR ${options.owner}/${options.repo}#${pr}: ${e.message}`);
+            return;
+        }
     });
 }
 exports.default = pr;
