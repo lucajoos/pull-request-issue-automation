@@ -1,6 +1,6 @@
 {
   "name": "pull-request-issue-automation",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "private": true,
   "description": "Automate the Creation of Pull Requests by Referencing Issues in Title",
   "main": "lib/main.js",
@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/lucajoos/automation.git"
+    "url": "git+https://github.com/lucajoos/pull-request-issue-automation.git"
   },
   "keywords": [
     "actions",
