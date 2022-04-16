@@ -1,6 +1,6 @@
 import {Octokit} from '@octokit/rest'
 import {Options} from './main'
-import core from '@actions/core'
+import * as core from '@actions/core'
 
 async function pr(
   octokit: Octokit,

@@ -1,7 +1,7 @@
-import core from '@actions/core'
-import github from '@actions/github'
-import pr from './pr'
+import * as core from '@actions/core'
+import * as github from '@actions/github'
 import {Octokit} from '@octokit/rest'
+import pr from './pr'
 
 export type Options = {
   token: string
